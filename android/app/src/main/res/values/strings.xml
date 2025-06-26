@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Your backend–provided Web Client ID -->
+    <string name="default_web_client_id">
+        401048982997-t8g45cnv8h9k51juspujusrvuhfptm93.apps.googleusercontent.com
+    </string>
+</resources>
