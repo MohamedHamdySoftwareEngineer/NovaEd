@@ -1,7 +1,6 @@
 import 'package:novaed_app/core/widgets/base_scaffold.dart';
 import 'package:novaed_app/core/widgets/exit_button.dart';
 import 'package:flutter/material.dart';
-import '../../../../../core/utils/app_router.dart';
 import '../../../../../core/utils/constants.dart';
 
 class UserProfileBody extends StatefulWidget {
@@ -16,12 +15,12 @@ class _UserProfileBodyState extends State<UserProfileBody> {
   // Mock user data - in a real app, this would come from an API or state management
   final Map<String, dynamic> userData = {
     "username": "user432",
-    "firstName": "ابراهيم",
-    "secondName": "محمد",
-    "lastName": "احمد",
+    "firstName": "محمد",
+    "lastName": "حمدي",
     "gender": "M",
-    "email": "ibrahim.ahmed@example.com",
-    "notes": "مستخدم نشط يحب متابعة آخر التحديثات والاشتراك في الفعاليات المختلفة.",
+    "email": "mohamedhamdy@example.com",
+    "notes":
+        "مستخدم نشط يحب متابعة آخر التحديثات والاشتراك في الفعاليات المختلفة.",
     "userPoints": 10
   };
 
@@ -53,7 +52,7 @@ class _UserProfileBodyState extends State<UserProfileBody> {
         userData['notes'] = notesController.text;
         isEditing = false;
       });
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Directionality(
@@ -72,7 +71,8 @@ class _UserProfileBodyState extends State<UserProfileBody> {
           ),
           backgroundColor: correctAnswerColor,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         ),
       );
@@ -94,7 +94,7 @@ class _UserProfileBodyState extends State<UserProfileBody> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    
+
     return BaseScaffold(
       appBartTitle: 'الملف الشخصي',
       initialIndex: widget.initialIndex,
@@ -115,17 +115,17 @@ class _UserProfileBodyState extends State<UserProfileBody> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height: size.height * 0.03),
-                      
+
                       // User profile card
                       _buildUserProfileCard(),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Edit/Save buttons
                       _buildActionButtons(),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Account information section
                       _buildInfoSection(
                         title: 'معلومات الحساب',
@@ -149,9 +149,9 @@ class _UserProfileBodyState extends State<UserProfileBody> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 20),
-                      
+
                       // Personal information section
                       _buildInfoSection(
                         title: 'المعلومات الشخصية',
@@ -160,7 +160,8 @@ class _UserProfileBodyState extends State<UserProfileBody> {
                           InfoItem(
                             icon: Icons.person_outline,
                             title: 'الاسم الكامل',
-                            value: '${userData['firstName']} ${userData['secondName']} ${userData['lastName']}',
+                            value:
+                                '${userData['firstName']} ${userData['lastName']}',
                           ),
                           InfoItem(
                             icon: Icons.note_outlined,
@@ -175,12 +176,12 @@ class _UserProfileBodyState extends State<UserProfileBody> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Logout button
                       const ExitButton(),
-                      
+
                       SizedBox(height: size.height * 0.05),
                     ],
                   ),
@@ -192,7 +193,7 @@ class _UserProfileBodyState extends State<UserProfileBody> {
       ),
     );
   }
-  
+
   // User profile card with avatar and basic info
   Widget _buildUserProfileCard() {
     return Container(
@@ -246,26 +247,23 @@ class _UserProfileBodyState extends State<UserProfileBody> {
                       color: backgroundBoxesColor,
                       shape: BoxShape.circle,
                     ),
-                    child: Center(
-                      child: Text(
-                        _getInitials(),
-                        style: const TextStyle(
-                          color: mainColor,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.person,
+                        color: mainColor,
+                        size: 40,
                       ),
                     ),
                   ),
                 ),
               ),
-              
               // Points badge
               Positioned(
                 left: 0,
                 bottom: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: mainColor,
                     borderRadius: BorderRadius.circular(20),
@@ -296,12 +294,12 @@ class _UserProfileBodyState extends State<UserProfileBody> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // Full name
           Text(
-            '${userData['firstName']} ${userData['secondName']} ${userData['lastName']}',
+            '${userData['firstName']} ${userData['lastName']}',
             style: const TextStyle(
               color: mainTextColor,
               fontSize: 22,
@@ -309,9 +307,9 @@ class _UserProfileBodyState extends State<UserProfileBody> {
             ),
             textAlign: TextAlign.center,
           ),
-          
+
           const SizedBox(height: 8),
-          
+
           // Username
           Text(
             '@${userData['username']}',
@@ -321,14 +319,14 @@ class _UserProfileBodyState extends State<UserProfileBody> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Gender badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: userData['gender'] == 'M' 
+              color: userData['gender'] == 'M'
                   ? Colors.blue.withOpacity(0.1)
                   : Colors.pink.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
@@ -345,7 +343,8 @@ class _UserProfileBodyState extends State<UserProfileBody> {
                 Text(
                   userData['gender'] == 'M' ? 'ذكر' : 'أنثى',
                   style: TextStyle(
-                    color: userData['gender'] == 'M' ? Colors.blue : Colors.pink,
+                    color:
+                        userData['gender'] == 'M' ? Colors.blue : Colors.pink,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -357,118 +356,119 @@ class _UserProfileBodyState extends State<UserProfileBody> {
       ),
     );
   }
-  
+
   // Action buttons (Edit/Save/Cancel)
   Widget _buildActionButtons() {
     return !isEditing
-      ? Container(
-          width: double.infinity,
-          height: 52,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: mainColor.withOpacity(0.3),
-                blurRadius: 12,
-                spreadRadius: 0,
-                offset: const Offset(0, 6),
+        ? Container(
+            width: double.infinity,
+            height: 52,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: mainColor.withOpacity(0.3),
+                  blurRadius: 12,
+                  spreadRadius: 0,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: ElevatedButton.icon(
+              onPressed: () => _toggleEditMode(true),
+              icon: const Icon(Icons.edit, size: 20),
+              label: const Text(
+                'تعديل الملف الشخصي',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: mainColor,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+            ),
+          )
+        : Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: progressIndeicatorColor.withOpacity(0.3),
+                        blurRadius: 12,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: _saveChanges,
+                    icon: const Icon(Icons.save, size: 20),
+                    label: const Text(
+                      'حفظ',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: mainColor,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: secondTextColor.withOpacity(0.2),
+                        blurRadius: 8,
+                        spreadRadius: 0,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: () => _toggleEditMode(false),
+                    icon: const Icon(Icons.cancel, size: 20),
+                    label: const Text(
+                      'إلغاء',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: secondTextColor,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
-          ),
-          child: ElevatedButton.icon(
-            onPressed: () => _toggleEditMode(true),
-            icon: const Icon(Icons.edit, size: 20),
-            label: const Text(
-              'تعديل الملف الشخصي',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: mainColor,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-          ),
-        )
-      : Row(
-          children: [
-            Expanded(
-              child: Container(
-                height: 52,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: progressIndeicatorColor.withOpacity(0.3),
-                      blurRadius: 12,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                ),
-                child: ElevatedButton.icon(
-                  onPressed: _saveChanges,
-                  icon: const Icon(Icons.save, size: 20),
-                  label: const Text(
-                    'حفظ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: mainColor,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Container(
-                height: 52,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: secondTextColor.withOpacity(0.2),
-                      blurRadius: 8,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ElevatedButton.icon(
-                  onPressed: () => _toggleEditMode(false),
-                  icon: const Icon(Icons.cancel, size: 20),
-                  label: const Text(
-                    'إلغاء',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: secondTextColor,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        );
+          );
   }
-  
+
   // Information section builder
-  Widget _buildInfoSection({
-    required String title, 
-    required IconData icon,
-    required List<InfoItem> items
-  }) {
+  Widget _buildInfoSection(
+      {required String title,
+      required IconData icon,
+      required List<InfoItem> items}) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -512,7 +512,7 @@ class _UserProfileBodyState extends State<UserProfileBody> {
               ],
             ),
           ),
-          
+
           // Section items
           ...items.asMap().entries.map((entry) {
             int index = entry.key;
@@ -533,7 +533,7 @@ class _UserProfileBodyState extends State<UserProfileBody> {
       ),
     );
   }
-  
+
   // Info item widget
   Widget _buildInfoItemWidget(InfoItem item) {
     return Padding(
@@ -578,16 +578,16 @@ class _UserProfileBodyState extends State<UserProfileBody> {
                 ),
                 const SizedBox(height: 8),
                 isEditing && item.isEditable
-                  ? item.editWidget
-                  : Text(
-                      item.value,
-                      style: const TextStyle(
-                        color: mainTextColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    ? item.editWidget
+                    : Text(
+                        item.value,
+                        style: const TextStyle(
+                          color: mainTextColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.right,
                       ),
-                      textAlign: TextAlign.right,
-                    ),
               ],
             ),
           ),
@@ -595,7 +595,7 @@ class _UserProfileBodyState extends State<UserProfileBody> {
       ),
     );
   }
-  
+
   // Text field builder for edit mode
   Widget _buildTextField({
     required TextEditingController controller,
@@ -613,7 +613,8 @@ class _UserProfileBodyState extends State<UserProfileBody> {
         hintStyle: TextStyle(color: secondTextColor.withOpacity(0.7)),
         filled: true,
         fillColor: backgroundColor,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -633,7 +634,7 @@ class _UserProfileBodyState extends State<UserProfileBody> {
       ),
     );
   }
-  
+
   // Email validation
   String? _emailValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -643,14 +644,13 @@ class _UserProfileBodyState extends State<UserProfileBody> {
     }
     return null;
   }
-  
+
   // Logout button
-  
-  
-  
+
   // Get initials for avatar
   String _getInitials() {
-    return userData['firstName'].substring(0, 1) + userData['lastName'].substring(0, 1);
+    return userData['firstName'].substring(0, 1) +
+        userData['lastName'].substring(0, 1);
   }
 }
 

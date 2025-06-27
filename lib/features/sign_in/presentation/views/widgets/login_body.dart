@@ -1,4 +1,4 @@
-import 'package:novaed_app/core/services/api_service.dart';
+import 'package:novaed_app/core/services/auth_service.dart';
 import 'package:novaed_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:typewritertext/typewritertext.dart';
@@ -13,18 +13,12 @@ class LoginBody extends StatefulWidget {
 }
 
 class _LoginBodyState extends State<LoginBody> {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+ 
   final _formKey = GlobalKey<FormState>();
 
-  bool isPasswordVisible = false;
+  
 
-  @override
-  void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +40,6 @@ class _LoginBodyState extends State<LoginBody> {
                 SizedBox(height: size.height * 0.06),
                 // Login Form Card
                 _buildLoginCard(size),
-                SizedBox(height: size.height * 0.04),
-                // Sign Up Link
-                _buildSignUpSection(),
               ],
             ),
           ),
@@ -160,7 +151,7 @@ class _LoginBodyState extends State<LoginBody> {
               ),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Icon(
+            child:const Icon(
               Icons.login_rounded,
               size: 32,
               color: mainColor,
@@ -213,8 +204,7 @@ class _LoginBodyState extends State<LoginBody> {
       child: ElevatedButton(
         onPressed: () async {
           try {
-            final result = await ApiService().signInWithGoogle();
-            // result['user'], result['tokens']…
+            final userInfo = await AuthService().signInWithGoogle();
             AppRouter.toHomeView(context);
           } catch (e) {
             ScaffoldMessenger.of(context)
@@ -267,38 +257,6 @@ class _LoginBodyState extends State<LoginBody> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildSignUpSection() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextButton(
-            onPressed: () {
-              AppRouter.toSignUp(context);
-            },
-            child: const Text(
-              'إنشاء حساب',
-              style: TextStyle(
-                color: mainColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ),
-          const Text(
-            'ليس لديك حساب؟ ',
-            style: TextStyle(
-              color: secondTextColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
       ),
     );
   }

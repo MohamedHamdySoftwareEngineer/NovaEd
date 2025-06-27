@@ -2,7 +2,6 @@ import 'package:novaed_app/features/choice_screen/presentation/views/choice_scre
 import 'package:novaed_app/features/home/presentation/views/home_view.dart';
 import 'package:novaed_app/features/quiz_screen/presentation/views/quiz_screen.dart';
 import 'package:novaed_app/features/sign_in/presentation/views/login.dart';
-import 'package:novaed_app/features/sign_up/presentation/views/sign_up.dart';
 import 'package:novaed_app/features/splash/presentation/views/splash_view.dart';
 import 'package:novaed_app/features/user_profile/presentation/views/user_profile.dart';
 import 'package:dio/dio.dart';
@@ -30,7 +29,6 @@ abstract class AppRouter {
       GoRoute(path: '/', builder: (context, state) => const SplashView()),
       GoRoute(path: rHomeView, builder: (context, state) => const HomeView()),
       GoRoute(path: rSignIn, builder: (context, state) => const LogIn()),
-      GoRoute(path: rSignUp, builder: (context, state) => const SignUp()),
       GoRoute(
         path: rChoiceScreen,
         builder: (context, state) {
@@ -84,9 +82,6 @@ abstract class AppRouter {
 
   static Future<T?> toSignIn<T>(BuildContext context) =>
       context.push<T>(rSignIn);
-
-  static Future<T?> toSignUp<T>(BuildContext context) =>
-      context.push<T>(rSignUp);
 
   static Future<T?> toChoiceScreen<T>(BuildContext context,
           {int initialIndex = 1}) =>
