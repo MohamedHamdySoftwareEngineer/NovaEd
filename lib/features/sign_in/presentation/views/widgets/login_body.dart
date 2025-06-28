@@ -204,7 +204,7 @@ class _LoginBodyState extends State<LoginBody> {
       child: ElevatedButton(
         onPressed: () async {
           try {
-            final userInfo = await AuthService().signInWithGoogle();
+            await AuthService().signInWithGoogle();
             AppRouter.toHomeView(context);
           } catch (e) {
             ScaffoldMessenger.of(context)
