@@ -1,40 +1,37 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:novaed_app/core/services/auth_http_client.dart';
 import 'package:novaed_app/features/sign_in/data/models/user_model.dart';
 
 class AuthService {
-  static const String baseUrl =
-      'http://novaedapp-env.eba-ceaqmh3m.me-south-1.elasticbeanstalk.com';
-
-  static const String clientId =
-      '401048982997-t8g45cnv8h9k51juspujusrvuhfptm93.apps.googleusercontent.com';
+  final baseUrl = dotenv.env['baseUrl']!;
+  final clientId = dotenv.env['clientId']!;
 
   final storage = const FlutterSecureStorage();
   static const accessTokenKey = 'access_token';
   static const refreshTokenKey = 'refresh_token';
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
+  late final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
     serverClientId: clientId,
   );
 
   Future<User> signInWithGoogle() async {
-
     // Show Google account chooser
     final googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
       throw Exception('You Should use a Google Account To Continue!');
     }
-    
+
     // Getting google Id Token after the user chooces his account
     final googleAuth = await googleUser.authentication;
     final googleIdToken = googleAuth.idToken;
 
     if (googleIdToken == null) {
-      throw Exception('Failed to obtain Google ID token, try again later or choose another account');
+      throw Exception(
+          'Failed to obtain Google ID token, try again later or choose another account');
     }
 
     final response = await AuthHttpClient().post(
@@ -64,7 +61,7 @@ class AuthService {
     await storage.write(key: accessTokenKey, value: tokens.accessToken);
     await storage.write(key: refreshTokenKey, value: tokens.refreshToken);
   }
-  
+
   // getting new accessToken and stored
   Future<void> getNewAccessTokenByRefreshToken() async {
     final refreshToken = await storage.read(key: refreshTokenKey);
@@ -93,5 +90,4 @@ class AuthService {
     await _googleSignIn.signOut();
     await storage.deleteAll();
   }
-
 }
