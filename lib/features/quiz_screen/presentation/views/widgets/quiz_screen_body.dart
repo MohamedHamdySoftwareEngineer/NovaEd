@@ -84,63 +84,7 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
     );
   }
 
-  // Method for Progress Section
-  Widget _buildProgressSection() {
-    double progress = (currentQuestionIndex + 1) / _questions.length;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: backgroundBoxesColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-              color: secondTextColor.withOpacity(0.1),
-              blurRadius: 15,
-              offset: const Offset(0, 5))
-        ],
-      ),
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'السؤال ${currentQuestionIndex + 1} من ${_questions.length}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: mainTextColor,
-                  ),
-                ),
-                Text(
-                  '${(progress * 100).toInt()}%',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: mainColor,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: LinearProgressIndicator(
-                value: progress,
-                backgroundColor: mainColor.withOpacity(0.2),
-                valueColor: const AlwaysStoppedAnimation<Color>(mainColor),
-                minHeight: 8,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  
 
   Widget _buildFinishButton() {
     return SizedBox(

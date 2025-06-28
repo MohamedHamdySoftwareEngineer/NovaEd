@@ -648,10 +648,6 @@ class _UserProfileBodyState extends State<UserProfileBody> {
   // Logout button
 
   // Get initials for avatar
-  String _getInitials() {
-    return userData['firstName'].substring(0, 1) +
-        userData['lastName'].substring(0, 1);
-  }
 }
 
 // Info item model for better structure
