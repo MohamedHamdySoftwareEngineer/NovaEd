@@ -9,36 +9,32 @@ class AuthService {
   static const String baseUrl =
       'http://novaedapp-env.eba-ceaqmh3m.me-south-1.elasticbeanstalk.com';
 
-  static const String webClientId =
+  static const String clientId =
       '401048982997-t8g45cnv8h9k51juspujusrvuhfptm93.apps.googleusercontent.com';
 
   final storage = const FlutterSecureStorage();
   static const accessTokenKey = 'access_token';
   static const refreshTokenKey = 'refresh_token';
 
-  GoogleSignIn _googleSignIn = GoogleSignIn(
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-    serverClientId: webClientId,
+    serverClientId: clientId,
   );
 
   Future<User> signInWithGoogle() async {
-    if (kIsWeb) {
-      _googleSignIn = GoogleSignIn(
-        clientId: webClientId,
-        scopes: ['email', 'profile'],
-      );
-    }
 
+    // Show Google account chooser
     final googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
-      throw Exception('Google sign-in was aborted by user');
+      throw Exception('You Should use a Google Account To Continue!');
     }
-
+    
+    // Getting google Id Token after the user chooces his account
     final googleAuth = await googleUser.authentication;
     final googleIdToken = googleAuth.idToken;
 
     if (googleIdToken == null) {
-      throw Exception('Failed to obtain Google ID token');
+      throw Exception('Failed to obtain Google ID token, try again later or choose another account');
     }
 
     final response = await AuthHttpClient().post(
@@ -58,17 +54,18 @@ class AuthService {
       throw Exception('$error (${response.statusCode})');
     }
 
-    final auth = AuthResponse.fromJson(jsonDecode(response.body));
-    await saveTokens(auth.tokens);
+    final authResponse = AuthResponse.fromJson(jsonDecode(response.body));
+    await saveTokens(authResponse.tokens);
 
-    return auth.user;
+    return authResponse.user;
   }
 
   Future<void> saveTokens(Tokens tokens) async {
     await storage.write(key: accessTokenKey, value: tokens.accessToken);
     await storage.write(key: refreshTokenKey, value: tokens.refreshToken);
   }
-
+  
+  // getting new accessToken and stored
   Future<void> getNewAccessTokenByRefreshToken() async {
     final refreshToken = await storage.read(key: refreshTokenKey);
 

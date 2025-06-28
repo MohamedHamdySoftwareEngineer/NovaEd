@@ -11,21 +11,21 @@ class AuthHttpClient extends BaseClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     // read the access token
-    final token = await storage.read(key: AuthService.accessTokenKey);
-    if (token != null) {
-      request.headers['Authorization'] = 'Bearer $token';
+    final accessToken = await storage.read(key: AuthService.accessTokenKey);
+    if (accessToken != null) {
+      request.headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    // send the request
+    // send the request either get or post
     var response = await inner.send(request);
 
     // if 401, try refresh + retry once
     if (response.statusCode == 401) {
       try {
         await authService.getNewAccessTokenByRefreshToken();
-        final newToken = await storage.read(key: AuthService.accessTokenKey);
-        if (newToken != null) {
-          request.headers['Authorization'] = 'Bearer $newToken';
+        final newAccessToken = await storage.read(key: AuthService.accessTokenKey);
+        if (newAccessToken != null) {
+          request.headers['Authorization'] = 'Bearer $newAccessToken';
           response = await inner.send(request);
         }
       } catch (_) {
