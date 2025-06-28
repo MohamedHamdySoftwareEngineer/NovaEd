@@ -1,7 +1,6 @@
 // custom_bottom_bar.dart
 import 'package:novaed_app/core/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:smart_nav_bar/smart_nav_bar.dart';
 

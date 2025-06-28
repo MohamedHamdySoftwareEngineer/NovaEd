@@ -1,4 +1,3 @@
-import 'package:novaed_app/core/utils/styles.dart';
 import 'package:novaed_app/core/widgets/base_scaffold.dart';
 import 'package:novaed_app/core/widgets/header_section.dart';
 import 'package:flutter/material.dart';

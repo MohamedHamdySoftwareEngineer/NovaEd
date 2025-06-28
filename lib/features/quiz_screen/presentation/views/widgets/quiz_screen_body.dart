@@ -4,7 +4,6 @@ import '../../../../../core/utils/app_router.dart';
 import '../../../../../core/utils/assets.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/styles.dart';
-import '../../../../../core/widgets/base_scaffold.dart';
 
 class Question {
   final int questionID;

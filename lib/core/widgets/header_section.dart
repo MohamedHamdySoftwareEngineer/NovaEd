@@ -1,4 +1,3 @@
-import 'package:novaed_app/core/utils/assets.dart';
 import 'package:novaed_app/core/utils/constants.dart';
 import 'package:novaed_app/core/utils/styles.dart';
 import 'package:flutter/material.dart';

@@ -1,8 +1,5 @@
 import 'package:novaed_app/core/utils/app_router.dart';
-import 'package:novaed_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import '../utils/styles.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
