@@ -23,7 +23,8 @@ class AuthHttpClient extends BaseClient {
     if (response.statusCode == 401) {
       try {
         await authService.getNewAccessTokenByRefreshToken();
-        final newAccessToken = await storage.read(key: AuthService.accessTokenKey);
+        final newAccessToken =
+            await storage.read(key: AuthService.accessTokenKey);
         if (newAccessToken != null) {
           request.headers['Authorization'] = 'Bearer $newAccessToken';
           response = await inner.send(request);
@@ -37,4 +38,3 @@ class AuthHttpClient extends BaseClient {
     return response;
   }
 }
-

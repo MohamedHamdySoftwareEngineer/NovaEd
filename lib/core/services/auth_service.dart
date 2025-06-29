@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -53,6 +54,9 @@ class AuthService {
     }
 
     final authResponse = AuthResponse.fromJson(jsonDecode(response.body));
+    debugPrint('accessToken: ${authResponse.tokens.accessToken}');
+    debugPrint('refreshToken: ${authResponse.tokens.refreshToken}');
+
     await saveTokens(authResponse.tokens);
 
     return authResponse.user;
@@ -84,6 +88,7 @@ class AuthService {
     }
 
     final tokens = Tokens.fromJson(jsonDecode(response.body));
+
     await saveTokens(tokens);
   }
 

@@ -43,24 +43,28 @@ class ChoiceScreenBody extends StatelessWidget {
         'icon': Icons.calculate_rounded,
         'color': const Color(0xFFFF8A65),
         'lightColor': const Color(0xFFFFE0B2),
+        'collectionId':1091,
       },
       {
         'title': 'فيزياء',
         'icon': Icons.rocket_launch_rounded,
         'color': const Color(0xFFFF7043),
         'lightColor': const Color(0xFFFFCCBC),
+        'collectionId':1091,
       },
       {
         'title': 'أحياء',
         'icon': Icons.eco_rounded,
         'color': const Color(0xFF66BB6A),
         'lightColor': const Color(0xFFC8E6C9),
+        'collectionId':1091,
       },
       {
         'title': 'كيمياء',
         'icon': Icons.science_rounded,
         'color': const Color(0xFF42A5F5),
         'lightColor': const Color(0xFFBBDEFB),
+        'collectionId':1091,
       },
     ];
 
@@ -74,6 +78,7 @@ class ChoiceScreenBody extends StatelessWidget {
             icon: subject['icon'] as IconData,
             color: subject['color'] as Color,
             lightColor: subject['lightColor'] as Color,
+            collectionId: subject['collectionId'] as int,
           ),
         );
       }).toList(),
@@ -86,10 +91,14 @@ class ChoiceScreenBody extends StatelessWidget {
     required IconData icon,
     required Color color,
     required Color lightColor,
+    required int collectionId,
   }) {
     return GestureDetector(
       onTap: () {
-        AppRouter.toQuizScreen(context);
+        if(collectionId == 1091) {
+          
+          AppRouter.toQuizScreen(context);
+        }
       },
       child: Container(
         width: double.infinity,

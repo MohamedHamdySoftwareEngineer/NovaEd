@@ -13,12 +13,7 @@ class LoginBody extends StatefulWidget {
 }
 
 class _LoginBodyState extends State<LoginBody> {
- 
   final _formKey = GlobalKey<FormState>();
-
-  
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +146,7 @@ class _LoginBodyState extends State<LoginBody> {
               ),
               borderRadius: BorderRadius.circular(20),
             ),
-            child:const Icon(
+            child: const Icon(
               Icons.login_rounded,
               size: 32,
               color: mainColor,
