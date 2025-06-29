@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 import 'package:novaed_app/core/services/auth_http_client.dart';
 import 'package:novaed_app/features/sign_in/data/models/user_model.dart';
 
@@ -70,7 +71,7 @@ class AuthService {
       throw Exception('No refresh token!');
     }
 
-    final response = await AuthHttpClient().post(
+    final response = await http.post(
       Uri.parse('$baseUrl/api/v1/auth/refresh-token'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'token': refreshToken}),
