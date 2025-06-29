@@ -55,6 +55,8 @@ The app follows **MVVM (Model-View-ViewModel)** architecture pattern with **Cubi
 - **Scalability** - Easy feature additions and modifications
 - **Testability** - Comprehensive unit and widget testing capabilities
 
+> ![App Structure](assets/images/Hierarchy.png)
+
 
 ## 🎯 Development Status
 
@@ -63,9 +65,6 @@ The app follows **MVVM (Model-View-ViewModel)** architecture pattern with **Cubi
 - ⏳ **Testing** - Upcoming
 - 📅 **Google Play Release** - October 2024
 
-## 📱 Screenshots
-
-> *Screenshots will be available upon completion of API integration*
 
 ## 🚀 Upcoming Features
 
@@ -73,6 +72,26 @@ The app follows **MVVM (Model-View-ViewModel)** architecture pattern with **Cubi
 - **Video Explanations** - Visual learning support for complex topics
 - **Parent Dashboard** - Progress monitoring for parents
 - **Teacher Portal** - Educator tools for quiz creation and monitoring
+
+
+## 📱 UI
+> ![App Screenshot](assets/images/NovaEd/splash_screen.jpg)
+> ![App Screenshot](assets/images/NovaEd/login_screen.jpg)
+> ![App Screenshot](assets/images/NovaEd/home_screen.jpg)
+> ![App Screenshot](assets/images/NovaEd/choice_screen.jpg)
+> ![App Screenshot](assets/images/NovaEd/quiz_screen.jpg)
+> ![App Screenshot](assets/images/NovaEd/profile_screen.jpg)
+
+## 🎥 Demo Video
+
+<div align="center">
+  
+  <!-- Direct Link as Backup -->
+  <a href="https://www.linkedin.com/posts/activity-7336052241197338646-S3Xx?utm_source=share&utm_medium=member_android&rcm=ACoAAEZ080kBYve1e8OmVMu3Pfsw6lGiuHPfCuI">
+    <strong>📱 Open in LinkedIn </strong>
+  </a>
+  
+</div>
 
 
 
