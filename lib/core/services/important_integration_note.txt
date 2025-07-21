@@ -1,0 +1,16 @@
+3. Use AuthHttpClient for all your API calls
+
+Wherever you do:
+
+final response = await http.get(...);
+
+
+Replace with:
+final client = AuthHttpClient();
+final response = await client.get(
+  Uri.parse('$baseUrl/api/v1/some-protected-route'),
+  headers: {'Content-Type': 'application/json'},
+);
+
+Why? Every get, post, put, etc., will now carry your access token, 
+auto‑refresh on 401, and retry seamlessly.
