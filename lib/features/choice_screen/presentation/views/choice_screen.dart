@@ -14,7 +14,8 @@ class ChoiceScreen extends StatelessWidget {
       create: (context) => SubmissionCubit(ApiService()),
       child: PopScope(
         canPop: false,
-        child: Scaffold(body: ChoiceScreenBody(initialIndex: initialIndex)),
+        child: Scaffold(
+          body: ChoiceScreenBody(initialIndex: initialIndex)),
       ),
     );
   }

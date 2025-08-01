@@ -25,9 +25,9 @@ class AuthService {
 
   /// Shows the account‑picker every time.
   Future<User> signInWithGoogle() async {
-    final acct = await _googleSignIn.authenticate();
+    final account = await _googleSignIn.authenticate();
 
-    final auth = acct.authentication;
+    final auth = account.authentication;
     final idToken = auth.idToken;
     if (idToken == null || idToken.isEmpty) {
       throw Exception('Failed to retrieve ID token.');

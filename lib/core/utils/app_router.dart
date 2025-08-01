@@ -3,11 +3,9 @@ import 'package:novaed_app/features/home/presentation/views/home_view.dart';
 import 'package:novaed_app/features/quiz_screen/presentation/views/quiz_screen.dart';
 import 'package:novaed_app/features/sign_in/presentation/views/login.dart';
 import 'package:novaed_app/features/splash/presentation/views/splash_view.dart';
-import 'package:novaed_app/features/user_profile/presentation/views/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../features/sign_in/data/models/user_model.dart';
+import '../../features/User Profile/Presentation/views/user_profile.dart';
 
 abstract class AppRouter {
   // Route names
@@ -50,14 +48,9 @@ abstract class AppRouter {
         builder: (context, state) {
           // Extract initialIndex from extra or use default (0)
           final initialIndex = state.extra as int? ?? 0;
-          final extras = state.extra as Map<String, dynamic>?;
-          final user = extras?['user'] as User?;
-              
-          if (user == null) {
-           return const Scaffold(body: Center(child: Text('No user data')));
-          }
+         
 
-          return UserProfile(initialIndex: initialIndex, user: user);
+          return UserProfile(initialIndex: initialIndex);
         },
       ),
     ],
