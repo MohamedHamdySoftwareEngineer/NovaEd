@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:novaed_app/features/sign_in/presentation/manager/auth_state.dart';
+import 'package:novaed_app/features/LogIn/presentation/manager/auth_state.dart';
 
 import '../../data/models/user_model.dart';
 

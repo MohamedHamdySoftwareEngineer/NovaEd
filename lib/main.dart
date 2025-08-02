@@ -5,7 +5,7 @@ import 'package:novaed_app/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'core/utils/app_transation.dart';
-import 'features/sign_in/presentation/manager/auth_cubit.dart';
+import 'features/LogIn/presentation/manager/auth_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

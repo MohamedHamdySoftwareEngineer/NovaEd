@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:novaed_app/core/services/auth_http_client.dart';
-import 'package:novaed_app/features/sign_in/data/models/user_model.dart';
+import 'package:novaed_app/features/LogIn/data/models/user_model.dart';
 
 class AuthService {
   final String baseUrl = dotenv.env['baseUrl']!;
@@ -22,6 +22,17 @@ class AuthService {
       serverClientId: clientId,
     );
   }
+  
+  Future<void> ensureLoggedIn() async {
+   final rt = await _storage.read(key: refreshTokenKey);
+   if (rt == null) {
+     throw Exception('no refresh token');
+   }
+
+   // Try to bump only the accessToken. If this fails, we’ll go to Login.
+   await getNewAccessTokenByRefreshToken();
+ }
+
 
   /// Shows the account‑picker every time.
   Future<User> signInWithGoogle() async {

@@ -2,7 +2,10 @@ import 'package:novaed_app/core/utils/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/services/auth_service.dart';
 import '../../../../../core/utils/assets.dart';
+import '../../../../home/presentation/views/home_view.dart';
+import '../../../../LogIn/presentation/views/login.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
@@ -15,13 +18,16 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   @override
   void initState() {
     super.initState();
-    navigateToHome();
+    _checkLogin();
   }
 
-  void navigateToHome() {
-    Future.delayed(const Duration(milliseconds: 3500), () {
-      if (mounted) context.go(AppRouter.rSignIn);
-    });
+  Future<void> _checkLogin() async {
+    try {
+      await AuthService().ensureLoggedIn();
+      AppRouter.toHomeView(context);
+    } catch (e) {
+      AppRouter.toSignIn(context);
+    }
   }
 
   @override

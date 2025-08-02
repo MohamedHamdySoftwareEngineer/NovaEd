@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:novaed_app/core/widgets/base_scaffold.dart';
 import '../../../../../../../core/utils/constants.dart';
 import '../../../../../../../core/utils/responsive_helper.dart';
-import '../../../../sign_in/data/models/user_model.dart';
-import '../../../../sign_in/presentation/manager/auth_cubit.dart';
-import '../../../../sign_in/presentation/manager/auth_state.dart';
+import '../../../../LogIn/data/models/user_model.dart';
+import '../../../../LogIn/presentation/manager/auth_cubit.dart';
+import '../../../../LogIn/presentation/manager/auth_state.dart';
 
 class UserProfileBody extends StatelessWidget {
   final int initialIndex;

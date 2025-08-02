@@ -1,7 +1,7 @@
 import 'package:novaed_app/features/choice_screen/presentation/views/choice_screen.dart';
 import 'package:novaed_app/features/home/presentation/views/home_view.dart';
 import 'package:novaed_app/features/quiz_screen/presentation/views/quiz_screen.dart';
-import 'package:novaed_app/features/sign_in/presentation/views/login.dart';
+import 'package:novaed_app/features/LogIn/presentation/views/login.dart';
 import 'package:novaed_app/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
