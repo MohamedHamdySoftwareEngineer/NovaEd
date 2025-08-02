@@ -69,7 +69,7 @@ class QuizAnswerOptions extends StatelessWidget {
                     color: isSelected
                         ? mainColor
                         : isClickable
-                            ? boldBorderColor.withOpacity(0.2)
+                            ? mainColor.withOpacity(0.2)
                             : Colors.grey.withOpacity(0.3),
                     width: isSelected ? 2 : 1,
                   ),

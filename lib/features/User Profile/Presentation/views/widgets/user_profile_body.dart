@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:novaed_app/core/widgets/base_scaffold.dart';
 import '../../../../../../../core/utils/constants.dart';
 import '../../../../../../../core/utils/responsive_helper.dart';
+import '../../../../../core/widgets/profile_shimmer.dart';
 import '../../../../LogIn/data/models/user_model.dart';
-import '../../../../LogIn/presentation/manager/auth_cubit.dart';
-import '../../../../LogIn/presentation/manager/auth_state.dart';
+import '../../manager/profile_cubit.dart';
+import '../../manager/profile_state.dart';
 
 class UserProfileBody extends StatelessWidget {
   final int initialIndex;
@@ -14,9 +15,9 @@ class UserProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BlocBuilder<AuthCubit, AuthState>(
+    return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-        if (state is Authenticated) {
+        if (state is ProfileLoaded) {
           final user = state.user;
           return BaseScaffold(
             appBartTitle: 'الملف الشخصي',
@@ -41,7 +42,7 @@ class UserProfileBody extends StatelessWidget {
           );
         }
         // Return a fallback widget if not authenticated
-        return const Center(child: CircularProgressIndicator());
+        return const ProfileShimmer();
       },
     );
   }

@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:novaed_app/core/services/auth_http_client.dart';
 import 'package:novaed_app/features/quiz_screen/data/models/quiz_models.dart';
 
+import '../../features/LogIn/data/models/user_model.dart';
+
 class ApiService {
   final baseUrl = dotenv.env['baseUrl']!;
   final myHttp = AuthHttpClient();
@@ -79,5 +81,21 @@ class ApiService {
     final Map<String, dynamic> jsonMap = json.decode(response.body);
     return Explanation.fromJson(jsonMap);
   }
+
+  Future<User> getUserProfile() async {
+    final uri =
+        Uri.parse('$baseUrl/api/v1/users');
+
+    final response = await myHttp.get(uri);
+
+    if (response.statusCode != 200) {
+      throw Exception('Fetch user profile failed: ${response.statusCode}');
+    }
+
+    final Map<String, dynamic> jsonMap = json.decode(response.body);
+    return User.fromJson(jsonMap);
+  }
+
+ 
   
 }

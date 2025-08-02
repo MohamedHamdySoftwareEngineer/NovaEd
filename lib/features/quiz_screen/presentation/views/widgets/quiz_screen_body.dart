@@ -136,8 +136,7 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
                             EdgeInsets.all(ResponsiveHelper.getPadding(size)),
                         child: Column(
                           children: [
-                            SizedBox(
-                                height: ResponsiveHelper.getSpacing(size, 20)),
+                            
                             QuizQuestionCard(
                               size: size,
                               question: _questions[currentQuestionIndex],

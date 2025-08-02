@@ -79,14 +79,14 @@ class _QuizQuestionCardState extends State<QuizQuestionCard>
                   ResponsiveHelper.getBorderRadius(widget.size, 16),
                 ),
                 border: Border.all(
-                  color: mainColor.withOpacity(0.2),
+                  color: mainColor.withOpacity(0.5),
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withOpacity(0.15),
                     blurRadius: 10,
-                    offset: const Offset(0, 2),
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
