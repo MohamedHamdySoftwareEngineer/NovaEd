@@ -15,7 +15,6 @@ import 'quiz_shimmer_skeleton.dart';
 import 'quiz_submit_button.dart';
 
 class QuizScreenBody extends StatefulWidget {
-  // submissionId is used to uniquely identify the quiz session for the user.
   final int submissionId;
   final int collectionId;
   const QuizScreenBody({
@@ -29,7 +28,6 @@ class QuizScreenBody extends StatefulWidget {
 }
 
 class QuizScreenBodyState extends State<QuizScreenBody> {
-  // -1 meaning “no answer selected.” , Valid choice IDs will always be positive
   int selectedChoiceId = -1;
   bool isLoading = false;
   int currentQuestionIndex = 0;
@@ -38,6 +36,7 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
   dynamic currentExplanation;
   bool isAnswered = false;
   bool isSubmitting = false;
+  bool isLoadingNewQuestions = false; // Add this flag
 
   @override
   Widget build(BuildContext context) {
@@ -45,23 +44,28 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
     final isTablet = size.width > 600;
     final isLargeScreen = size.width > 900;
 
-    // BlocConsumer listens to the QuestionCubit state changes. It rebuilds
-    //the UI when the state changes (via builder) and performs side effects
-    // like showing explanations (via listener). It’s used to separate
-    //state-handling logic from UI rendering.
     return BlocConsumer<QuestionCubit, QuestionState>(
       listener: (ctx, state) {
         if (state is QuestionSuccess) {
-          _questions = state.questions;
+          setState(() {
+            _questions = state.questions;
+            // Only reset if we were loading new questions
+            if (isLoadingNewQuestions) {
+              currentQuestionIndex = 0;
+              selectedChoiceId = -1;
+              selectedChoice = null;
+              currentExplanation = null;
+              isAnswered = false;
+              isSubmitting = false;
+              isLoadingNewQuestions = false;
+            }
+          });
         }
         if (state is ChoiceSubmitSuccess) {
           setState(() {
             isSubmitting = false;
           });
           final q = _questions[currentQuestionIndex];
-          // to listen on changes, we didn't but in onPresesed method because his appear doesn't related with button clicked
-          // and we want to show explanation when the answer is submitted
-          // this line returns the explanation and gave him to the cubit
           debugPrint('Fetching explanation for question ID: ${q.questionID}');
           ctx.read<QuestionCubit>().getExplanation(q.questionID);
         }
@@ -71,7 +75,6 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
             isAnswered = true;
           });
 
-          // Show bottom sheet with explanation
           QuizExplanationSheet.show(
             selectedChoiceId: selectedChoiceId,
             size: size,
@@ -83,13 +86,15 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
         }
       },
       builder: (context, state) {
-        if (state is QuestionLoading && _questions.isEmpty) {
+        // Show loading when initially loading or loading new questions
+        if ((state is QuestionLoading && _questions.isEmpty) || isLoadingNewQuestions) {
           return QuizShimmerSkeleton(
             size: size,
             padding: ResponsiveHelper.getPadding(size),
             isTablet: isTablet,
           );
         }
+        
         if (state is QuestionFailure) {
           return Center(
             child: Container(
@@ -106,23 +111,18 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
           );
         }
 
-        // Always show the quiz UI if we have questions
         if (_questions.isNotEmpty) {
           return Container(
             color: backgroundColor,
             child: Column(
               children: [
-                // Custom header with progress, close button, and app icon
                 QuizHeader(
                   size: size,
                   onClosePressed: () => QuizExitDialog.show(context, size),
                 ),
 
-                // Scrollable content with responsive constraints
                 Expanded(
                   child: SingleChildScrollView(
-                    // to make keyboard dismissible when scrolling
-                    // i didn't need it but i used it
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
                     child: Center(
@@ -136,7 +136,6 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
                             EdgeInsets.all(ResponsiveHelper.getPadding(size)),
                         child: Column(
                           children: [
-                            
                             QuizQuestionCard(
                               size: size,
                               question: _questions[currentQuestionIndex],
@@ -159,7 +158,6 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
                   ),
                 ),
 
-                // Submit button at bottom with responsive width
                 QuizSubmitButton(
                   size: size,
                   hasSelectedAnswer: selectedChoiceId != -1,
@@ -191,11 +189,6 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
   }
 
   void _navigateToNext() {
-    // debugPrint(
-    //     '🔄 Current question: ${currentQuestionIndex + 1}/${_questions.length}');
-    // debugPrint(
-    //     '🔄 Is last question: ${currentQuestionIndex >= _questions.length - 1}');
-
     if (!mounted || !Navigator.of(context).canPop()) return;
 
     Navigator.of(context).pop(); // close the explanation sheet
@@ -204,22 +197,15 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
     final isLastQuestion = currentQuestionIndex >= _questions.length - 1;
 
     if (isLastQuestion) {
-      // 1. Fetch a fresh batch of questions
-      context.read<QuestionCubit>().getQuestions(widget.collectionId);
-
-      // 2. Reset our pointer and UI flags (so new list starts at 0)
+      // Set loading flag and fetch new questions
       setState(() {
-        currentQuestionIndex = 0;
-        selectedChoiceId = -1;
-        selectedChoice = null;
-        currentExplanation = null;
-        isAnswered = false;
-        isSubmitting = false;
+        isLoadingNewQuestions = true;
       });
-
-      // // Only navigate to choice screen if we've actually finished all questions
-      // AppRouter.toChoiceScreen(context);
+      
+      // Fetch new questions - the reset will happen in the listener
+      context.read<QuestionCubit>().getQuestions(widget.collectionId);
     } else {
+      // Move to next question in current batch
       setState(() {
         currentQuestionIndex++;
         selectedChoiceId = -1;
@@ -232,8 +218,6 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
   }
 
   void _handleAnswerSelection(Choice choice) {
-    // If the question is already answered, do not allow re-selection
-    // but if an answer is selected, allow changing the selection
     if (!isAnswered) {
       setState(() {
         selectedChoiceId = choice.choiceID;
