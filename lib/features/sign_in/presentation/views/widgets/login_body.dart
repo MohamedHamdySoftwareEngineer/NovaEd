@@ -18,6 +18,7 @@ class LoginBody extends StatefulWidget {
 
 class _LoginBodyState extends State<LoginBody> {
   final _formKey = GlobalKey<FormState>();
+  bool _logInProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -202,17 +203,22 @@ class _LoginBodyState extends State<LoginBody> {
       ),
       child: ElevatedButton(
         onPressed: () async {
+          if (_logInProgress) return;
+          _logInProgress = true;
+
           try {
             // Step 1: Perform actual login
             final user = await AuthService().signInWithGoogle();
-            
-             // Step 2: Store user in Cubit
+
+            // Step 2: Store user in Cubit
             context.read<AuthCubit>().setUser(user);
 
             AppRouter.toHomeView(context);
           } catch (e) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(e.toString())));
+          } finally {
+            _logInProgress = false;
           }
         },
         style: ElevatedButton.styleFrom(
