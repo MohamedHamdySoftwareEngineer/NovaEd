@@ -30,7 +30,7 @@ class AuthService {
     final auth = account.authentication;
     final idToken = auth.idToken;
     if (idToken == null || idToken.isEmpty) {
-      throw Exception('Failed to retrieve ID token.');
+      throw Exception('Failed to retrievse ID token.');
     }
 
     final resp = await AuthHttpClient().post(
@@ -41,6 +41,7 @@ class AuthService {
         'idToken': idToken,
       }),
     );
+    // debugPrint('Response JSON: ${resp.body}');
 
     if (resp.statusCode != 200) {
       final err = jsonDecode(resp.body)['message'] ?? 'Authentication failed';

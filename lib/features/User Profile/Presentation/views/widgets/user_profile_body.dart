@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:novaed_app/core/widgets/base_scaffold.dart';
 import '../../../../../../../core/utils/constants.dart';
 import '../../../../../../../core/utils/responsive_helper.dart';
+import '../../../../sign_in/data/models/user_model.dart';
+import '../../../../sign_in/presentation/manager/auth_cubit.dart';
+import '../../../../sign_in/presentation/manager/auth_state.dart';
 
 class UserProfileBody extends StatelessWidget {
   final int initialIndex;
@@ -10,30 +14,39 @@ class UserProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return BaseScaffold(
-      appBartTitle: 'الملف الشخصي',
-      initialIndex: initialIndex,
-      child: Container(
-        color: backgroundColor,
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                _buildProfileHeader(context, size),
-                SizedBox(height: ResponsiveHelper.getSpacing(size, 30)),
-                _buildProfileOptions(context, size),
-                SizedBox(height: ResponsiveHelper.getSpacing(size, 50)),
-              ],
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        if (state is Authenticated) {
+          final user = state.user;
+          return BaseScaffold(
+            appBartTitle: 'الملف الشخصي',
+            initialIndex: initialIndex,
+            child: Container(
+              color: backgroundColor,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      _buildProfileHeader(context, size, user),
+                      SizedBox(height: ResponsiveHelper.getSpacing(size, 30)),
+                      _buildProfileOptions(context, size, user),
+                      SizedBox(height: ResponsiveHelper.getSpacing(size, 50)),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-      ),
+          );
+        }
+        // Return a fallback widget if not authenticated
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
-  Widget _buildProfileHeader(BuildContext context, Size size) {
+  Widget _buildProfileHeader(BuildContext context, Size size, User user) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(25),
@@ -99,7 +112,8 @@ class UserProfileBody extends StatelessWidget {
                 left: 0,
                 bottom: 0,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: mainColor,
                     borderRadius: BorderRadius.circular(20),
@@ -111,14 +125,14 @@ class UserProfileBody extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.star, color: Colors.amber, size: 16),
-                      SizedBox(width: 4),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const SizedBox(width: 4),
                       Text(
-                        '250',
-                        style: TextStyle(
+                        user.userPoints.toString(),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
@@ -132,9 +146,9 @@ class UserProfileBody extends StatelessWidget {
           ),
           SizedBox(height: ResponsiveHelper.getSpacing(size, 15)),
           // User Name
-          const Text(
-            'أحمد محمد',
-            style: TextStyle(
+          Text(
+            '${user.firstName} ${user.lastName}',
+            style: const TextStyle(
               color: mainTextColor,
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -143,9 +157,9 @@ class UserProfileBody extends StatelessWidget {
           ),
           SizedBox(height: ResponsiveHelper.getSpacing(size, 5)),
           // User Email
-          const Text(
-            'ahmed.mohammed@example.com',
-            style: TextStyle(
+          Text(
+            user.username.toString(),
+            style: const TextStyle(
               color: secondTextColor,
               fontSize: 16,
             ),
@@ -155,122 +169,89 @@ class UserProfileBody extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileOptions(BuildContext context, Size size) {
+  Widget _buildProfileOptions(BuildContext context, Size size, User user) {
     return Column(
       children: [
-        _buildPersonalInfoSection(context, size),
+        _buildPersonalInfoSection(context, size, user),
         SizedBox(height: ResponsiveHelper.getSpacing(size, 20)),
         _buildAppOptionsSection(context, size),
       ],
     );
   }
 
-  Widget _buildPersonalInfoSection(BuildContext context, Size size) {
-    final personalInfo = [
-      {
-        'title': 'رقم الهاتف',
-        'value': '+20 1234567890',
-        'icon': Icons.phone_rounded,
-      },
-      {
-        'title': 'تاريخ الميلاد',
-        'value': '15 مايو 2000',
-        'icon': Icons.cake_rounded,
-      },
-      {
-        'title': 'المرحلة الدراسية',
-        'value': 'الثانوية العامة',
-        'icon': Icons.school_rounded,
-      },
-      {
-        'title': 'المدرسة',
-        'value': 'مدرسة النور الثانوية',
-        'icon': Icons.location_city_rounded,
-      },
-      {
-        'title': 'المحافظة',
-        'value': 'القاهرة',
-        'icon': Icons.location_on_rounded,
-      },
-      {
-        'title': 'رقم الطالب',
-        'value': 'ST202400123',
-        'icon': Icons.badge_rounded,
-      },
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Directionality(
-          textDirection: TextDirection.rtl,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: mainColor.withOpacity(0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.person_outline, color: mainColor, size: 20),
+  Widget _buildPersonalInfoSection(BuildContext context, Size size, User user) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Directionality(
+        textDirection: TextDirection.rtl,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: mainColor.withOpacity(0.1),
+                  shape: BoxShape.circle,
                 ),
-                const SizedBox(width: 16),
-                const Text(
-                  'المعلومات الشخصية',
-                  style: TextStyle(
-                    color: mainTextColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: const Icon(Icons.person_outline,
+                    color: mainColor, size: 20),
+              ),
+              const SizedBox(width: 16),
+              const Text(
+                'المعلومات الشخصية',
+                style: TextStyle(
+                  color: mainTextColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: ResponsiveHelper.getSpacing(size, 10)),
-        Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: backgroundBoxesColor,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: mainColor.withOpacity(0.1),
-                blurRadius: 20,
-                spreadRadius: 0,
-                offset: const Offset(0, 6),
               ),
             ],
           ),
-          child: Column(
-            children: personalInfo.asMap().entries.map((entry) {
-              int index = entry.key;
-              var info = entry.value;
-              return Column(
-                children: [
-                  if (index > 0)
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 24),
-                      height: 1,
-                      color: mainColor.withOpacity(0.1),
-                    ),
-                  _buildInfoCard(
-                    context: context,
-                    title: info['title'] as String,
-                    value: info['value'] as String,
-                    icon: info['icon'] as IconData,
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
         ),
-      ],
-    );
-  }
+      ),
+      SizedBox(height: ResponsiveHelper.getSpacing(size, 10)),
+      Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: backgroundBoxesColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: mainColor.withOpacity(0.1),
+              blurRadius: 20,
+              spreadRadius: 0,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            _buildInfoCard(
+              context: context,
+              title: 'البريد الإلكتروني',
+              value: user.email,
+              icon: Icons.email_rounded,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              height: 1,
+              color: mainColor.withOpacity(0.1),
+            ),
+            _buildInfoCard(
+              context: context,
+              title: 'ملاحظات',
+              value: user.notes,
+              icon: Icons.note_rounded,
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
 
   Widget _buildAppOptionsSection(BuildContext context, Size size) {
     final appOptions = [
@@ -305,17 +286,13 @@ class UserProfileBody extends StatelessWidget {
       {
         'title': 'تسجيل الخروج',
         'icon': Icons.logout_rounded,
-        'onTap': () {
-         
-        },
+        'onTap': () {},
       },
       {
         'title': 'حذف الحساب',
         'icon': Icons.delete_forever_rounded,
         'isDestructive': true,
-        'onTap': () {
-          
-        },
+        'onTap': () {},
       },
     ];
 
@@ -335,7 +312,8 @@ class UserProfileBody extends StatelessWidget {
                     color: mainColor.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.apps_rounded, color: mainColor, size: 20),
+                  child: const Icon(Icons.apps_rounded,
+                      color: mainColor, size: 20),
                 ),
                 const SizedBox(width: 16),
                 const Text(
@@ -353,7 +331,8 @@ class UserProfileBody extends StatelessWidget {
         SizedBox(height: ResponsiveHelper.getSpacing(size, 10)),
         ...appOptions.map((option) {
           return Container(
-            margin: EdgeInsets.only(bottom: ResponsiveHelper.getSpacing(size, 15)),
+            margin:
+                EdgeInsets.only(bottom: ResponsiveHelper.getSpacing(size, 15)),
             child: _buildProfileOptionCard(
               context: context,
               title: option['title'] as String,
@@ -474,12 +453,9 @@ class UserProfileBody extends StatelessWidget {
                 ),
               ),
             ),
-            
           ],
         ),
       ),
     );
   }
-
- 
 }

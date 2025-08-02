@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:novaed_app/core/services/auth_service.dart';
 import 'package:novaed_app/core/utils/assets.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import '../../../../../core/utils/app_router.dart';
 import '../../../../../core/utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../manager/auth_cubit.dart';
 
 class LoginBody extends StatefulWidget {
   const LoginBody({super.key});
@@ -201,8 +203,11 @@ class _LoginBodyState extends State<LoginBody> {
       child: ElevatedButton(
         onPressed: () async {
           try {
-           await AuthService().signInWithGoogle();
-
+            // Step 1: Perform actual login
+            final user = await AuthService().signInWithGoogle();
+            
+             // Step 2: Store user in Cubit
+            context.read<AuthCubit>().setUser(user);
 
             AppRouter.toHomeView(context);
           } catch (e) {

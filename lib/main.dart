@@ -1,19 +1,20 @@
-
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:novaed_app/core/utils/app_router.dart';
 import 'package:novaed_app/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'core/utils/app_transation.dart';
+import 'features/sign_in/presentation/manager/auth_cubit.dart';
 
-
-void main() async{
-  
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: "assets/.env");
-  runApp(const EyeApp());
+  runApp(BlocProvider(
+    create: (context) => AuthCubit(),
+    child: const EyeApp(),
+  ));
 }
 
 class EyeApp extends StatelessWidget {
@@ -26,15 +27,15 @@ class EyeApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: backgroundColor,
-        pageTransitionsTheme:  const PageTransitionsTheme(
+        pageTransitionsTheme: const PageTransitionsTheme(
           // Disable animations on Android & iOS
           builders: {
-            TargetPlatform.android:  FadeTransitionsBuilder(),
-            TargetPlatform.iOS:  FadeTransitionsBuilder(),
+            TargetPlatform.android: FadeTransitionsBuilder(),
+            TargetPlatform.iOS: FadeTransitionsBuilder(),
           },
         ),
         brightness: Brightness.light,
-        fontFamily: 'NotoSansArabic', 
+        fontFamily: 'NotoSansArabic',
         // fontFamily: GoogleFonts.notoSansArabic().fontFamily,
         textTheme: ThemeData.light().textTheme.apply(
               bodyColor: Colors.white,

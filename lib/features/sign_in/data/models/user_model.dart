@@ -1,12 +1,12 @@
 class User {
   final int userId;
-  final String? username;
-  final String? firstName;
-  final String? secondName;
-  final String? lastName;
+  final String username;
+  final String firstName;
+  final String secondName;
+  final String lastName;
   final bool gender;
-  final String? email;
-  final String? notes;
+  final String email;
+  final String notes;
   final int userPoints;
 
   User(
@@ -23,14 +23,14 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         userId: json['userId'],
-        username: json['username'],
-        firstName: json['firstName'],
-        secondName: json['secondName'],
-        lastName: json['lastName'],
-        gender: json['gender'],
-        email: json['email'],
-        notes: json['notes'],
-        userPoints: json['userPoints']);
+        username: json['username'] ?? '',
+        firstName: json['firstName'] ?? '',
+        secondName: json['secondName'] ?? '',
+        lastName: json['lastName'] ?? '',
+        gender: json['gender'] ?? false,
+        email: json['email'] ?? 'غير متوفر',
+        notes: json['notes'] ?? 'لا يوجد ملاحظات',
+        userPoints: json['userPoints'] ?? 0);
   }
 }
 
