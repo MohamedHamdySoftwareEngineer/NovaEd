@@ -206,6 +206,15 @@ class _LoginBodyState extends State<LoginBody> {
           if (_logInProgress) return;
           _logInProgress = true;
 
+          // show a blocking progress dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+
           try {
             // Step 1: Perform actual login
             final user = await AuthService().signInWithGoogle();

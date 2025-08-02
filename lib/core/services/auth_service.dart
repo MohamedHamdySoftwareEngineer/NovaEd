@@ -28,6 +28,8 @@ class AuthService {
     final account = await _googleSignIn.authenticate();
 
     final auth = account.authentication;
+
+    
     final idToken = auth.idToken;
     if (idToken == null || idToken.isEmpty) {
       throw Exception('Failed to retrievse ID token.');
