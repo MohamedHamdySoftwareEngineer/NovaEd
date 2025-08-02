@@ -21,7 +21,7 @@ class HomeViewBody extends StatelessWidget {
       color: backgroundColor,
       child: SafeArea(
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(

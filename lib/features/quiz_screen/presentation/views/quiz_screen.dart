@@ -23,6 +23,7 @@ class QuizScreen extends StatelessWidget {
         child: Scaffold(
           body: QuizScreenBody(
             submissionId: submissionId,
+            collectionId: collectionId,
           ),
         ),
       ),

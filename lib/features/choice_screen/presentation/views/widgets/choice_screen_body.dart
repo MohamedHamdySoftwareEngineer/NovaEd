@@ -22,7 +22,7 @@ class ChoiceScreenBody extends StatelessWidget {
       child: Container(
         color: backgroundColor,
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(

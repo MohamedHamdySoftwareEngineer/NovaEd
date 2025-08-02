@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:novaed_app/features/quiz_screen/data/models/quiz_models.dart';
 import 'package:novaed_app/features/quiz_screen/presentation/manager/question_cubit.dart';
 import 'package:novaed_app/features/quiz_screen/presentation/manager/question_state.dart';
-import '../../../../../core/utils/app_router.dart';
 import '../../../../../core/utils/constants.dart';
 import '../../../../../core/utils/responsive_helper.dart';
 import '../../../../../core/utils/styles.dart';
@@ -15,13 +14,14 @@ import 'quiz_question_card.dart';
 import 'quiz_shimmer_skeleton.dart';
 import 'quiz_submit_button.dart';
 
-
 class QuizScreenBody extends StatefulWidget {
   // submissionId is used to uniquely identify the quiz session for the user.
   final int submissionId;
+  final int collectionId;
   const QuizScreenBody({
     super.key,
     required this.submissionId,
+    required this.collectionId,
   });
 
   @override
@@ -45,9 +45,9 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
     final isTablet = size.width > 600;
     final isLargeScreen = size.width > 900;
 
-    // BlocConsumer listens to the QuestionCubit state changes. It rebuilds 
+    // BlocConsumer listens to the QuestionCubit state changes. It rebuilds
     //the UI when the state changes (via builder) and performs side effects
-    // like showing explanations (via listener). It’s used to separate 
+    // like showing explanations (via listener). It’s used to separate
     //state-handling logic from UI rendering.
     return BlocConsumer<QuestionCubit, QuestionState>(
       listener: (ctx, state) {
@@ -63,9 +63,7 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
           // and we want to show explanation when the answer is submitted
           // this line returns the explanation and gave him to the cubit
           debugPrint('Fetching explanation for question ID: ${q.questionID}');
-          ctx
-              .read<QuestionCubit>()
-              .getExplanation(q.questionID);
+          ctx.read<QuestionCubit>().getExplanation(q.questionID);
         }
         if (state is ExplanationSuccess) {
           setState(() {
@@ -75,8 +73,8 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
 
           // Show bottom sheet with explanation
           QuizExplanationSheet.show(
-            selectedChoiceId:selectedChoiceId,
-            size:size,
+            selectedChoiceId: selectedChoiceId,
+            size: size,
             context: context,
             explanation: state.explanation,
             onNextPressed: _navigateToNext,
@@ -117,9 +115,7 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
                 // Custom header with progress, close button, and app icon
                 QuizHeader(
                   size: size,
-                  totalQuestions: _questions.length,
-                  currentQuestionIndex: currentQuestionIndex,
-                  onClosePressed: () => QuizExitDialog.show(context,size),
+                  onClosePressed: () => QuizExitDialog.show(context, size),
                 ),
 
                 // Scrollable content with responsive constraints
@@ -127,7 +123,8 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
                   child: SingleChildScrollView(
                     // to make keyboard dismissible when scrolling
                     // i didn't need it but i used it
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     child: Center(
                       child: Container(
                         constraints: BoxConstraints(
@@ -135,16 +132,18 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
                               ? 800
                               : (isTablet ? 600 : double.infinity),
                         ),
-                        padding: EdgeInsets.all(ResponsiveHelper.getPadding(size)),
+                        padding:
+                            EdgeInsets.all(ResponsiveHelper.getPadding(size)),
                         child: Column(
                           children: [
-                            SizedBox(height: ResponsiveHelper.getSpacing(size, 20)),
+                            SizedBox(
+                                height: ResponsiveHelper.getSpacing(size, 20)),
                             QuizQuestionCard(
                               size: size,
                               question: _questions[currentQuestionIndex],
-                              currentQuestionIndex: currentQuestionIndex,
                             ),
-                            SizedBox(height: ResponsiveHelper.getSpacing(size, 20)),
+                            SizedBox(
+                                height: ResponsiveHelper.getSpacing(size, 20)),
                             QuizAnswerOptions(
                               size: size,
                               question: _questions[currentQuestionIndex],
@@ -152,7 +151,8 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
                               isAnswered: isAnswered,
                               onAnswerSelected: _handleAnswerSelection,
                             ),
-                            SizedBox(height: ResponsiveHelper.getSpacing(size, 20)),
+                            SizedBox(
+                                height: ResponsiveHelper.getSpacing(size, 20)),
                           ],
                         ),
                       ),
@@ -162,7 +162,7 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
 
                 // Submit button at bottom with responsive width
                 QuizSubmitButton(
-                  size:size,
+                  size: size,
                   hasSelectedAnswer: selectedChoiceId != -1,
                   isAnswered: isAnswered,
                   isSubmitting: isSubmitting,
@@ -192,34 +192,43 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
   }
 
   void _navigateToNext() {
-    debugPrint(
-        '🔄 Current question: ${currentQuestionIndex + 1}/${_questions.length}');
-    debugPrint(
-        '🔄 Is last question: ${currentQuestionIndex >= _questions.length - 1}');
-    
-    // what is mounted?
-    // mounted is a boolean that indicates whether the widget is still in the widget tree
-    // It is used to check if the widget is still active before calling setState or Navigator
-    // canPop() checks if there is a route to pop, meaning if we can go back in the navigation stack
-    if (mounted && Navigator.of(context).canPop()) {
-      Navigator.of(context).pop();
+    // debugPrint(
+    //     '🔄 Current question: ${currentQuestionIndex + 1}/${_questions.length}');
+    // debugPrint(
+    //     '🔄 Is last question: ${currentQuestionIndex >= _questions.length - 1}');
 
-      // Check if this is the last question BEFORE incrementing
-      final isLastQuestion = currentQuestionIndex >= _questions.length - 1;
+    if (!mounted || !Navigator.of(context).canPop()) return;
 
-      if (isLastQuestion) {
-        // Only navigate to choice screen if we've actually finished all questions
-        AppRouter.toChoiceScreen(context);
-      } else {
-        setState(() {
-          currentQuestionIndex++;
-          selectedChoiceId = -1;
-          selectedChoice = null;
-          currentExplanation = null;
-          isAnswered = false;
-          isSubmitting = false;
-        });
-      }
+    Navigator.of(context).pop(); // close the explanation sheet
+
+    // Check if this is the last question BEFORE incrementing
+    final isLastQuestion = currentQuestionIndex >= _questions.length - 1;
+
+    if (isLastQuestion) {
+      // 1. Fetch a fresh batch of questions
+      context.read<QuestionCubit>().getQuestions(widget.collectionId);
+
+      // 2. Reset our pointer and UI flags (so new list starts at 0)
+      setState(() {
+        currentQuestionIndex = 0;
+        selectedChoiceId = -1;
+        selectedChoice = null;
+        currentExplanation = null;
+        isAnswered = false;
+        isSubmitting = false;
+      });
+
+      // // Only navigate to choice screen if we've actually finished all questions
+      // AppRouter.toChoiceScreen(context);
+    } else {
+      setState(() {
+        currentQuestionIndex++;
+        selectedChoiceId = -1;
+        selectedChoice = null;
+        currentExplanation = null;
+        isAnswered = false;
+        isSubmitting = false;
+      });
     }
   }
 
