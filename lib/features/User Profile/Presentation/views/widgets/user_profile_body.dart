@@ -255,20 +255,14 @@ class UserProfileBody extends StatelessWidget {
 
   Widget _buildAppOptionsSection(BuildContext context, Size size) {
     final appOptions = [
-      {
-        'title': 'إحصائياتي',
-        'icon': Icons.bar_chart_rounded,
-        'onTap': () {
-          // Navigate to statistics screen
-        },
-      },
-      {
-        'title': 'الإعدادات',
-        'icon': Icons.settings_rounded,
-        'onTap': () {
-          // Navigate to settings screen
-        },
-      },
+      
+      // {
+      //   'title': 'الإعدادات',
+      //   'icon': Icons.settings_rounded,
+      //   'onTap': () {
+      //     // Navigate to settings screen
+      //   },
+      // },
       {
         'title': 'المساعدة والدعم',
         'icon': Icons.help_outline_rounded,
