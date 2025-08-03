@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:novaed_app/core/utils/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,13 +20,16 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   @override
   void initState() {
     super.initState();
-    _checkLogin();
+    _initializeApp();
   }
 
-  Future<void> _checkLogin() async {
+  Future<void> _initializeApp() async {
     try {
-      await AuthService().ensureLoggedIn();
+      await AuthService().ensureLoggedIn(context)
+      .timeout(const Duration(seconds:5));
       AppRouter.toHomeView(context);
+    } on TimeoutException {
+      AppRouter.toSignIn(context);
     } catch (e) {
       AppRouter.toSignIn(context);
     }

@@ -23,15 +23,22 @@ class AuthService {
     );
   }
   
-  Future<void> ensureLoggedIn() async {
-   final rt = await _storage.read(key: refreshTokenKey);
-   if (rt == null) {
-     throw Exception('no refresh token');
-   }
+  Future<void> ensureLoggedIn(BuildContext context) async {
+  try {
+    final rt = await _storage.read(key: refreshTokenKey);
+    if (rt == null) {
+      throw Exception('No refresh token');
+    }
 
-   // Try to bump only the accessToken. If this fails, we’ll go to Login.
-   await getNewAccessTokenByRefreshToken();
- }
+    await getNewAccessTokenByRefreshToken();
+  } catch (e) {
+    debugPrint('Refresh token expired/invalid: $e');
+    await _storage.deleteAll();  // Clear invalid tokens
+    if (context.mounted) {
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
+  }
+}
 
 
   /// Shows the account‑picker every time.

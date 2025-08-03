@@ -222,8 +222,11 @@ class _LoginBodyState extends State<LoginBody> {
             // Step 2: Store user in Cubit
             context.read<AuthCubit>().setUser(user);
 
+            Navigator.of(context).pop(); // Close progress dialog
+
             AppRouter.toHomeView(context);
           } catch (e) {
+             Navigator.of(context).pop(); // Close progress dialog
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(e.toString())));
           } finally {
