@@ -36,7 +36,6 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
   dynamic currentExplanation;
   bool isAnswered = false;
   bool isSubmitting = false;
-  bool isLoadingNewQuestions = false; // Add this flag
 
   @override
   Widget build(BuildContext context) {
@@ -48,16 +47,19 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
       listener: (ctx, state) {
         if (state is QuestionSuccess) {
           setState(() {
+            // Check if this is a new set of questions (when _questions was not empty before)
+            final wasReloadingQuestions = _questions.isNotEmpty;
+            
             _questions = state.questions;
-            // Only reset if we were loading new questions
-            if (isLoadingNewQuestions) {
+            
+            // Only reset when reloading questions (not initial load)
+            if (wasReloadingQuestions) {
               currentQuestionIndex = 0;
               selectedChoiceId = -1;
               selectedChoice = null;
               currentExplanation = null;
               isAnswered = false;
               isSubmitting = false;
-              isLoadingNewQuestions = false;
             }
           });
         }
@@ -86,8 +88,8 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
         }
       },
       builder: (context, state) {
-        // Show loading when initially loading or loading new questions
-        if ((state is QuestionLoading && _questions.isEmpty) || isLoadingNewQuestions) {
+        // Only show loading shimmer for initial load (when _questions is empty)
+        if (state is QuestionLoading && _questions.isEmpty) {
           return QuizShimmerSkeleton(
             size: size,
             padding: ResponsiveHelper.getPadding(size),
@@ -189,7 +191,7 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
   }
 
   void _navigateToNext() {
-    if (!mounted || !Navigator.of(context).canPop()) return;
+    if (!mounted) return;
 
     Navigator.of(context).pop(); // close the explanation sheet
 
@@ -197,12 +199,8 @@ class QuizScreenBodyState extends State<QuizScreenBody> {
     final isLastQuestion = currentQuestionIndex >= _questions.length - 1;
 
     if (isLastQuestion) {
-      // Set loading flag and fetch new questions
-      setState(() {
-        isLoadingNewQuestions = true;
-      });
-      
-      // Fetch new questions - the reset will happen in the listener
+      // Fetch new questions - no loading flag needed
+      // The current questions stay visible until new ones arrive
       context.read<QuestionCubit>().getQuestions(widget.collectionId);
     } else {
       // Move to next question in current batch
