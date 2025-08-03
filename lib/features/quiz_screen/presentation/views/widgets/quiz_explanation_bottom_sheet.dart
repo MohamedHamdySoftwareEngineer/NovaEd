@@ -49,7 +49,6 @@ class QuizExplanationSheet {
                   SizedBox(height: ResponsiveHelper.getSpacing(size, 20)),
                   NavigationButtons(
                     size: size,
-                    isLastQuestion: isLastQuestion,
                     onNext: onNextPressed,
                     mainColor: mainColor,
                   ),

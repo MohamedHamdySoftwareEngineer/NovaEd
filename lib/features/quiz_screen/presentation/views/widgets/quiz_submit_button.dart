@@ -198,9 +198,9 @@ class _QuizSubmitButtonState extends State<QuizSubmitButton>
                                     SizedBox(
                                       width: isTablet ? 24 : 20,
                                       height: isTablet ? 24 : 20,
-                                      child: CircularProgressIndicator(
+                                      child: const CircularProgressIndicator(
                                         strokeWidth: 2.5,
-                                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                       ),
                                     ),
                                     SizedBox(width: widget.size.width * 0.03),

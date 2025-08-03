@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:novaed_app/core/utils/responsive_helper.dart';
 
 class NavigationButtons extends StatelessWidget {
-  final bool isLastQuestion;
+
   final VoidCallback onNext;
   final Color mainColor;
   final Size size;
@@ -10,7 +10,6 @@ class NavigationButtons extends StatelessWidget {
   const NavigationButtons({
     super.key,
     
-    required this.isLastQuestion,
     required this.onNext,
     required this.mainColor,
     required this.size,
@@ -23,7 +22,7 @@ class NavigationButtons extends StatelessWidget {
 
     return Row(
       children: [
-        if (!isLastQuestion)
+       
           Expanded(
             child: SizedBox(
               height: buttonHeight,
@@ -47,31 +46,7 @@ class NavigationButtons extends StatelessWidget {
               ),
             ),
           ),
-        if (isLastQuestion)
-          // Expanded makes the button fill all available horizontal space in the Row
-          Expanded(
-            child: SizedBox(
-              height: buttonHeight,
-              child: ElevatedButton(
-                onPressed: onNext,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      ResponsiveHelper.getBorderRadius(size, 12),
-                    ),
-                  ),
-                ),
-                child: Text(
-                  'إنهاء الاختبار',
-                  style: TextStyle(
-                    fontSize: ResponsiveHelper.getFontSize(size, 16),
-                  ),
-                ),
-              ),
-            ),
-          ),
+       
       ],
     );
   }
